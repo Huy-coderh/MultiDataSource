@@ -3,7 +3,6 @@ package com.naic.datasource.bean;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.naic.datasource.DataSourceLoader;
 import com.naic.datasource.TenantContextHolder;
-import com.naic.datasource.bean.ApplicationContextProvider;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.util.Assert;
 
@@ -20,6 +19,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     /**
      * 用于保存租户key和数据源的映射关系，目标数据源map的拷贝
+     * 因为父类该map为peivate且没有提供get方法
      */
     private Map<Object, Object> targetDataSources;
 
