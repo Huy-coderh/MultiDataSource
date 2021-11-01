@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.naic.datasource.config.MyBatisPlusConfig,\
+  com.naic.datasource.DataSourceLoader,\
+  com.naic.datasource.config.AutoConfiguration, \
+  com.naic.datasource.config.WebmvcInterceptorConfiguration, \
+  com.naic.datasource.config.WebfluxInterceptorConfiguration
