@@ -19,7 +19,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     /**
      * 用于保存租户key和数据源的映射关系，目标数据源map的拷贝
-     * 因为父类该map为peivate且没有提供get方法
+     * 因为父类该map为private且没有提供get方法
      */
     private Map<Object, Object> targetDataSources;
 
@@ -52,7 +52,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         try {
             dataSource = (DruidDataSource) super.determineTargetDataSource();
         } catch (IllegalStateException exception){
-            // 重新加载数据源
+            // 数据源获取失败,可能是新加入的数据源,重新加载数据源
             DataSourceLoader loader = ApplicationContextProvider.getBean(DataSourceLoader.class);
             loader.addDataSource();
             dataSource = (DruidDataSource) super.determineTargetDataSource();

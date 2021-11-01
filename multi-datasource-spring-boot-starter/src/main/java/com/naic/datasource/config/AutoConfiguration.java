@@ -14,6 +14,7 @@ public class AutoConfiguration {
 
     @Bean
     public RequestContextListener requestContextListenerBean() {
+        // 用来初始化 ApplicationContextProvider 上下文
         return new RequestContextListener();
     }
 

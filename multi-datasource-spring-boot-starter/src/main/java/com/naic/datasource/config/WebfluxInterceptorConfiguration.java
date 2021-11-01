@@ -3,6 +3,7 @@ package com.naic.datasource.config;
 import com.naic.datasource.TenantContextHolder;
 import com.naic.datasource.constant.DataSourceConstant;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
@@ -19,6 +20,7 @@ import java.util.List;
  * @since 2021/11/1
  */
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
+@Order(-999)
 public class WebfluxInterceptorConfiguration implements WebFilter {
     @Override
     @Nonnull
