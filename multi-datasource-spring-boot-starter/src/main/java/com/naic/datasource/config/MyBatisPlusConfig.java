@@ -1,6 +1,11 @@
 package com.naic.datasource.config;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.baomidou.mybatisplus.core.incrementer.IKeyGenerator;
+import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
+import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
@@ -9,6 +14,7 @@ import org.apache.ibatis.plugin.Interceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -18,6 +24,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author HuZhenSha
@@ -26,6 +33,11 @@ import java.util.Map;
 @MapperScan("com.naic.datasource.mapper")
 public class MyBatisPlusConfig {
 
+    private final ApplicationContext applicationContext;
+
+    public MyBatisPlusConfig(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @Bean("master")
     @Primary
@@ -61,6 +73,19 @@ public class MyBatisPlusConfig {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         // 扫描映射文件
         sessionFactory.setMapperLocations(resolver.getResources("classpath*:mapper/**/*Mapper.xml"));
+
+        // 配置其他配置
+        GlobalConfig globalConfig = new GlobalConfig();
+        // 注入填充器
+        this.getBeanThen(MetaObjectHandler.class, globalConfig::setMetaObjectHandler);
+        // 注入主键生成器
+        this.getBeanThen(IKeyGenerator.class, i -> globalConfig.getDbConfig().setKeyGenerator(i));
+        // 注入sql注入器
+        this.getBeanThen(ISqlInjector.class, globalConfig::setSqlInjector);
+        // 注入ID生成器
+        this.getBeanThen(IdentifierGenerator.class, globalConfig::setIdentifierGenerator);
+        sessionFactory.setGlobalConfig(globalConfig);
+
         return sessionFactory;
     }
 
@@ -80,6 +105,19 @@ public class MyBatisPlusConfig {
         // 开启 count 的join优化，只针对left join
         paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
         return paginationInterceptor;
+    }
+
+    /**
+     * 检查spring容器里是否有对应的bean,有则进行消费
+     *
+     * @param clazz    class
+     * @param consumer 消费
+     * @param <T>      泛型
+     */
+    private <T> void getBeanThen(Class<T> clazz, Consumer<T> consumer) {
+        if (this.applicationContext.getBeanNamesForType(clazz, false, false).length > 0) {
+            consumer.accept(this.applicationContext.getBean(clazz));
+        }
     }
 
 }
