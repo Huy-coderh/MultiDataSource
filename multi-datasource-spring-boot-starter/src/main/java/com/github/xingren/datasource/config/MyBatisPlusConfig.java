@@ -1,4 +1,4 @@
-package com.naic.datasource.config;
+package com.github.xingren.datasource.config;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
@@ -9,13 +9,14 @@ import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
-import com.naic.datasource.bean.DynamicDataSource;
+import com.github.xingren.datasource.bean.DynamicDataSource;
 import org.apache.ibatis.plugin.Interceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -30,7 +31,8 @@ import java.util.function.Consumer;
  * @author HuZhenSha
  * @date 2021/4/29 10:48
  */
-@MapperScan("com.naic.datasource.mapper")
+@MapperScan("com.naic.com.github.xingren.datasource.mapper")
+@ComponentScan("com.naic.com.github.xingren.datasource")
 public class MyBatisPlusConfig {
 
     private final ApplicationContext applicationContext;
@@ -41,13 +43,13 @@ public class MyBatisPlusConfig {
 
     @Bean("master")
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource")
+    @ConfigurationProperties(prefix = "spring.com.github.xingren.datasource")
     public DataSource master() {
         return DruidDataSourceBuilder.create().build();
     }
 
     @Bean("dynamicDataSource")
-    public DynamicDataSource dynamicDataSource(@Qualifier("master")DataSource dataSource) {
+    public DynamicDataSource dynamicDataSource(@Qualifier("master") DataSource dataSource) {
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         Map<Object, Object> dataSourceMap = new HashMap<>();
         dataSourceMap.put("master", dataSource);
@@ -57,6 +59,7 @@ public class MyBatisPlusConfig {
         dynamicDataSource.setTargetDataSources(dataSourceMap);
         return dynamicDataSource;
     }
+
     @Bean
     public MybatisSqlSessionFactoryBean sqlSessionFactoryBean(@Qualifier("dynamicDataSource") DynamicDataSource dataSource,
                                                               @Qualifier("paginationInterceptor") PaginationInterceptor paginationInterceptor) throws Exception {
@@ -69,7 +72,7 @@ public class MyBatisPlusConfig {
         //配置数据源，此处配置为关键配置，如果没有将 dynamicDataSource作为数据源则不能实现切换
         sessionFactory.setDataSource(dataSource);
         // 扫描Model
-        //sessionFactory.setTypeAliasesPackage("com.naic.datasource.mapper.*");
+        //sessionFactory.setTypeAliasesPackage("com.naic.com.github.xingren.datasource.mapper.*");
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         // 扫描映射文件
         sessionFactory.setMapperLocations(resolver.getResources("classpath*:mapper/**/*Mapper.xml"));
@@ -97,10 +100,11 @@ public class MyBatisPlusConfig {
 
     /**
      * 分页插件
+     *
      * @return bean
      */
     @Bean
-    public PaginationInterceptor paginationInterceptor(){
+    public PaginationInterceptor paginationInterceptor() {
         PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
         // 开启 count 的join优化，只针对left join
         paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));

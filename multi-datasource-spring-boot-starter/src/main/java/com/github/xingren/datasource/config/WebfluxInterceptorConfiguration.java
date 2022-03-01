@@ -1,7 +1,8 @@
-package com.naic.datasource.config;
+package com.github.xingren.datasource.config;
 
-import com.naic.datasource.TenantContextHolder;
-import com.naic.datasource.constant.DataSourceConstant;
+import com.github.xingren.datasource.TenantContextHolder;
+import com.github.xingren.datasource.constant.DataSourceConstant;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -22,12 +23,16 @@ import java.util.List;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 @Order(-999)
 public class WebfluxInterceptorConfiguration implements WebFilter {
+
+    @Value("${multi-datasource.app.tenant-key}")
+    private String tenantKey;
+
     @Override
     @Nonnull
     public Mono<Void> filter(@Nonnull ServerWebExchange exchange, @Nonnull WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String tenantId = null;
-        List<String> tenantHeader = request.getHeaders().get(DataSourceConstant.TENANT);
+        List<String> tenantHeader = request.getHeaders().get(tenantKey);
         if (tenantHeader != null){
             tenantId = tenantHeader.get(0);
         }

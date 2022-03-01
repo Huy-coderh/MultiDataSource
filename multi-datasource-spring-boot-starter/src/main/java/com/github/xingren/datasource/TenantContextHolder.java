@@ -1,4 +1,4 @@
-package com.naic.datasource;
+package com.github.xingren.datasource;
 
 /**
  * @author HuZhenSha

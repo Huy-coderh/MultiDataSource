@@ -1,8 +1,8 @@
-package com.naic.datasource.bean;
+package com.github.xingren.datasource.bean;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.naic.datasource.DataSourceLoader;
-import com.naic.datasource.TenantContextHolder;
+import com.github.xingren.datasource.DataSourceLoader;
+import com.github.xingren.datasource.TenantContextHolder;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.util.Assert;
 
@@ -19,7 +19,6 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     /**
      * 用于保存租户key和数据源的映射关系，目标数据源map的拷贝
-     * 因为父类该map为private且没有提供get方法
      */
     private Map<Object, Object> targetDataSources;
 
@@ -52,7 +51,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         try {
             dataSource = (DruidDataSource) super.determineTargetDataSource();
         } catch (IllegalStateException exception){
-            // 数据源获取失败,可能是新加入的数据源,重新加载数据源
+            // 重新加载数据源
             DataSourceLoader loader = ApplicationContextProvider.getBean(DataSourceLoader.class);
             loader.addDataSource();
             dataSource = (DruidDataSource) super.determineTargetDataSource();

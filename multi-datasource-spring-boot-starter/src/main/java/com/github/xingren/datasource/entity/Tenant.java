@@ -1,4 +1,4 @@
-package com.naic.datasource.entity;
+package com.github.xingren.datasource.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -8,14 +8,14 @@ import lombok.Data;
  * @since 2021/10/28
  */
 @Data
-@TableName("mes_tenant")
+@TableName("tenant")
 public class Tenant {
 
     private Long id;
 
     private Long tenantId;
 
-    private String tenantName;
+    private Long appId;
 
     private String host;
 

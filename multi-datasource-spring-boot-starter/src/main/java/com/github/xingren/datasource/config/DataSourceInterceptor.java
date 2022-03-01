@@ -1,7 +1,9 @@
-package com.naic.datasource.config;
+package com.github.xingren.datasource.config;
 
-import com.naic.datasource.TenantContextHolder;
-import com.naic.datasource.constant.DataSourceConstant;
+
+import com.github.xingren.datasource.TenantContextHolder;
+import com.github.xingren.datasource.constant.DataSourceConstant;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -15,9 +17,13 @@ import javax.servlet.http.HttpServletResponse;
  * @since 2021/10/28
  */
 public class DataSourceInterceptor implements HandlerInterceptor {
+
+    @Value("${multi-datasource.app.tenant-key}")
+    private String tenantKey;
+
     @Override
     public boolean preHandle(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull Object handler) {
-        String tenantId = request.getHeader(DataSourceConstant.TENANT);
+        String tenantId = request.getHeader(tenantKey);
         if (! StringUtils.isEmpty(tenantId)){
             TenantContextHolder.setTenantKey(tenantId);
         }

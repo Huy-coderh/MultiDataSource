@@ -1,4 +1,4 @@
-package com.naic.datasource.bean;
+package com.github.xingren.datasource.bean;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

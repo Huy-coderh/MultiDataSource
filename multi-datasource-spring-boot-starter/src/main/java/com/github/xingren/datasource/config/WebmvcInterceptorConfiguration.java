@@ -1,4 +1,4 @@
-package com.naic.datasource.config;
+package com.github.xingren.datasource.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

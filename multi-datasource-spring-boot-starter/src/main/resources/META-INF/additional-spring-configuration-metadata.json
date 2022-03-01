@@ -1,8 +1,18 @@
 {
   "properties": [
     {
-      "name": "database.name",
+      "name": "multi-datasource.database.name",
       "type": "java.lang.String",
-      "description": "Description for database.name."
-  }
-] }
+      "description": "the scheme name in a database which this server connect to."
+    },
+    {
+      "name": "multi-datasource.app.tenant-key",
+      "type": "java.lang.String",
+      "description": "the tenant key word in system that will be used in http headers."
+    },
+    {
+      "name": "multi-datasource.app.id",
+      "type": "java.lang.Long",
+      "description": "the id of this server that is used to distinguish different system."
+    }
+  ] }
