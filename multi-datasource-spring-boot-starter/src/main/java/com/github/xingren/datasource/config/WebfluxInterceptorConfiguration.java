@@ -1,7 +1,6 @@
 package com.github.xingren.datasource.config;
 
 import com.github.xingren.datasource.TenantContextHolder;
-import com.github.xingren.datasource.constant.DataSourceConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.core.annotation.Order;

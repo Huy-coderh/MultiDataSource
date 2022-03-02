@@ -22,10 +22,5 @@ public class AutoConfiguration {
         return new ApplicationContextProvider();
     }
 
-    @Bean
-    public FeignInterceptor feignInterceptor(){
-        return new FeignInterceptor();
-    }
-
 
 }

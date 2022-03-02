@@ -31,8 +31,8 @@ import java.util.function.Consumer;
  * @author HuZhenSha
  * @date 2021/4/29 10:48
  */
-@MapperScan("com.naic.com.github.xingren.datasource.mapper")
-@ComponentScan("com.naic.com.github.xingren.datasource")
+@MapperScan("com.github.xingren.datasource.mapper")
+@ComponentScan("com.github.xingren.datasource")
 public class MyBatisPlusConfig {
 
     private final ApplicationContext applicationContext;
@@ -43,7 +43,7 @@ public class MyBatisPlusConfig {
 
     @Bean("master")
     @Primary
-    @ConfigurationProperties(prefix = "spring.com.github.xingren.datasource")
+    @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource master() {
         return DruidDataSourceBuilder.create().build();
     }

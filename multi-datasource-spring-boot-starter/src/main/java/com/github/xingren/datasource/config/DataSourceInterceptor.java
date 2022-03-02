@@ -3,6 +3,7 @@ package com.github.xingren.datasource.config;
 
 import com.github.xingren.datasource.TenantContextHolder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -15,13 +16,14 @@ import javax.servlet.http.HttpServletResponse;
  * @author HuZhenSha
  * @since 2021/10/28
  */
+@Component
 public class DataSourceInterceptor implements HandlerInterceptor {
 
     @Value("${multi-datasource.app.tenant-key}")
     private String tenantKey;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull Object handler) {
+    public boolean preHandle(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull Object handler) {
         String tenantId = request.getHeader(tenantKey);
         if (! StringUtils.isEmpty(tenantId)){
             TenantContextHolder.setTenantKey(tenantId);

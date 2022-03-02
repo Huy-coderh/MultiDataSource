@@ -11,8 +11,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class WebmvcInterceptorConfiguration implements WebMvcConfigurer{
+
+    private final DataSourceInterceptor dataSourceInterceptor;
+
+    public WebmvcInterceptorConfiguration(DataSourceInterceptor dataSourceInterceptor) {
+        this.dataSourceInterceptor = dataSourceInterceptor;
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry){
-        registry.addInterceptor(new DataSourceInterceptor());
+        registry.addInterceptor(dataSourceInterceptor);
     }
 }

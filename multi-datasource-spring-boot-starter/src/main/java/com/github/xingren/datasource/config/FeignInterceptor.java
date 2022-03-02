@@ -1,10 +1,10 @@
 package com.github.xingren.datasource.config;
 
 import com.github.xingren.datasource.TenantContextHolder;
-import com.github.xingren.datasource.constant.DataSourceConstant;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * feign interceptor used in rpc communication
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @author HuZhenSha
  * @since 2021/10/28
  */
+@Component
 public class FeignInterceptor implements RequestInterceptor {
 
     @Value("${multi-datasource.app.tenant-key}")
